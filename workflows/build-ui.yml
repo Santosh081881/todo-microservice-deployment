@@ -1,0 +1,48 @@
+name: Build and Push image of Micro Todo ui to ACR
+
+on:
+  push:
+    paths:
+      - 'MicroTodoUI/**'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  
+jobs:
+  build-and-push:
+    runs-on: myrunner
+
+    env:
+      IMAGE_NAME: todo-frontend-tasks-api
+      IMAGE_TAG: v1
+      ACR_NAME: sonyacr002
+      ACR_LOGIN_SERVER: sonyacr002.azurecr.io
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: 4c5e86c5-063e-46fe-8224-a238dc433558
+          tenant-id: 1449fb85-6c94-4b5d-bcf2-9410cee07ba5
+          subscription-id: e088c65c-826b-4b26-8075-ab650aa85523
+
+      - name: Log in to ACR
+        run: |
+          az acr login --name $ACR_NAME
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $IMAGE_NAME:$IMAGE_TAG ./MicroTodoUI
+
+      - name: Tag Docker Image for ACR
+        run: |
+          docker tag $IMAGE_NAME:$IMAGE_TAG $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+
+      - name: Push Docker Image to ACR
+        run: |
+          docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
