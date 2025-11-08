@@ -12,7 +12,7 @@ permissions:
   
 jobs:
   build-and-push:
-    runs-on: sonuvm
+    runs-on: santosh
 
     env:
       IMAGE_NAME: todo-delete-tasks-api
