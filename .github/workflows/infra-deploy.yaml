@@ -70,9 +70,9 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init -input=false
-        working-directory: environments/dev
+        working-directory: ./terraform-todoapp-infra/environments/dev
 
       - name: Terraform Apply
         id: apply
         run: terraform apply --auto-approve
-        working-directory: environments/dev
+        working-directory: ./terraform-todoapp-infra/environments/dev
