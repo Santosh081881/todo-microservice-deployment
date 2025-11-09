@@ -23,6 +23,14 @@ module "acr" {
   tags       = local.common_tags
 }
 
+# Role assignment block
+resource "azurerm_role_assignment" "sony_acr_pull" {
+  depends_on           = [module.aks, module.acr]
+  scope                = module.acr.acr_id
+  role_definition_name = "AcrPull"
+  principal_id         = module.aks.kubelet_object_id
+}
+
 module "sql_server" {
   depends_on      = [module.rg]
   source          = "../../modules/azurerm_sql_server"
