@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: delete-task-api.santu.shop
+    - host: delete-task-api.devopswithaniket.in
       http:
         paths:
           - pathType: Prefix
