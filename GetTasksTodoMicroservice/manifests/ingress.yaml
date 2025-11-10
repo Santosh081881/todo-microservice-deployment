@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: get-tasks-api.santu.shop
+  - host: get-tasks-api.devopswithaniket.in
     http:
       paths:
       - pathType: Prefix
