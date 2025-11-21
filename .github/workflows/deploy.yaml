@@ -1,0 +1,36 @@
+name: Microservice Deployment
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, staging, prod]
+
+    environment: ${{ matrix.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Build microservice
+        run: npm install && npm run build
+
+      - name: Deploy to ${{ matrix.environment }}
+        run: |
+          echo "Deploying to ${{ matrix.environment }}..."
+          # Example: Azure CLI
+          az webapp deploy --name myapp-${{ matrix.environment }} \
+                           --resource-group rg-${{ matrix.environment }} \
+                           --src-path ./dist
+        env:
+          DB_CONN_STRING: ${{ secrets.DB_CONN_STRING }}
+          API_KEY: ${{ secrets.API_KEY }}
